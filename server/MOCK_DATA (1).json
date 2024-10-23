@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "first_name": "Jess",
+    "last_name": "Limprecht",
+    "email": "jlimprecht0@com.com",
+    "gender": "Female"
+  },
+  {
+    "id": 2,
+    "first_name": "Langsdon",
+    "last_name": "Huster",
+    "email": "lhuster1@chronoengine.com",
+    "gender": "Male"
+  },
+  {
+    "id": 3,
+    "first_name": "Jesse",
+    "last_name": "Izakoff",
+    "email": "jizakoff2@china.com.cn",
+    "gender": "Male"
+  },
+  {
+    "id": 4,
+    "first_name": "Annamarie",
+    "last_name": "Schruyers",
+    "email": "aschruyers3@bbb.org",
+    "gender": "Female"
+  },
+  {
+    "id": 5,
+    "first_name": "Fabe",
+    "last_name": "Dincke",
+    "email": "fdincke4@howstuffworks.com",
+    "gender": "Male"
+  },
+  {
+    "id": 6,
+    "first_name": "Genni",
+    "last_name": "Klejin",
+    "email": "gklejin5@networksolutions.com",
+    "gender": "Female"
+  },
+  {
+    "id": 7,
+    "first_name": "Ty",
+    "last_name": "Jencey",
+    "email": "tjencey6@dell.com",
+    "gender": "Male"
+  },
+  {
+    "id": 8,
+    "first_name": "Efren",
+    "last_name": "Fanthom",
+    "email": "efanthom7@domainmarket.com",
+    "gender": "Male"
+  },
+  {
+    "id": 9,
+    "first_name": "Tod",
+    "last_name": "Barrus",
+    "email": "tbarrus8@qq.com",
+    "gender": "Male"
+  },
+  {
+    "id": 10,
+    "first_name": "Fredrika",
+    "last_name": "Newcom",
+    "email": "fnewcom9@uol.com.br",
+    "gender": "Female"
+  },
+  {
+    "first_name": "usman",
+    "last_name": "Khan",
+    "email": "usman@gmai.com",
+    "gender": "Male",
+    "id": 11
+  },
+  {
+    "first_name": "usman",
+    "last_name": "Khan",
+    "email": "usman@gmai.com",
+    "gender": "Male",
+    "id": 12
+  }
+]
