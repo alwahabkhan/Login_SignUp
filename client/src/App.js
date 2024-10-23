@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import SignUp from "../src/SignUp.jsx";
-import Login from "../src/Login.jsx";
-import Home from "../src/Home.jsx";
-import ForgetPassword from "./ForgetPassword.jsx";
-import ResetPassword from "./ResetPassword.jsx";
+import SignUp from "./Components/Signup/Index.jsx";
+import Login from "../src/Components/login/Index.jsx";
+import Home from "../src/Components/Home/Index.jsx";
+import ForgetPassword from "../src/Components/ForgetPassword/Index.jsx";
+import ResetPassword from "../src/Components/ResetPassword/Index.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
