@@ -1,9 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import SignUp from "./Components/Signup/Index.jsx";
+import SignUp from "./Components/Signup/SignUp.jsx";
 import Login from "../src/Components/login/Index.jsx";
 import Home from "../src/Components/Home/Index.jsx";
-import ForgetPassword from "../src/Components/ForgetPassword/Index.jsx";
+import CreatePost from "../src/Components/CreatePost/Index.jsx";
+import ForgetPassword from "./Components/ForgetPassword/ForgetPassword.jsx";
 import ResetPassword from "../src/Components/ResetPassword/Index.jsx";
+// import PostTable from "../src/Components/PostTable/Index.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           path="/reset-password/:id/:token"
           element={<ResetPassword />}
         ></Route>
+        <Route path="/create-post" element={<CreatePost />}></Route>
+        {/* <Route path="/post-table" element={<PostTable />}></Route> */}
       </Routes>
     </BrowserRouter>
   );

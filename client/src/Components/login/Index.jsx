@@ -129,6 +129,7 @@ function Login() {
             </Form.Control.Feedback>
           </Form.Group>
           <Button
+            // onClick={() => navigate("/home")}
             variant="primary"
             type="submit"
             style={{
