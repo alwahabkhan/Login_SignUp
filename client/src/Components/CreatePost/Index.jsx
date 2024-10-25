@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -15,6 +15,10 @@ function CreatePost() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setAuthor(localStorage.getItem("firstname"));
+  }, []);
+
   const validate = () => {
     let tempErrors = {};
     let isValid = true;
@@ -26,11 +30,6 @@ function CreatePost() {
 
     if (!description) {
       tempErrors["description"] = "Description is required";
-      isValid = false;
-    }
-
-    if (!author) {
-      tempErrors["author"] = "Author is required";
       isValid = false;
     }
 
@@ -64,12 +63,22 @@ function CreatePost() {
     formData.append("date", formattedDate);
     formData.append("file", file);
 
-    console.log(file);
+    console.log("FormData entries:");
+    formData.forEach((value, key) => console.log(key, value));
+
+    // console.log(file);
     try {
-      await axios.post("http://localhost:8000/posts", formData).then((res) => {
-        console.log(res);
-        navigate("/home");
-      });
+      await axios
+        .post("http://localhost:8000/posts", formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          navigate("/home");
+        });
     } catch (err) {
       console.error("Error during registration:", err);
     }
@@ -116,11 +125,11 @@ function CreatePost() {
         />
         <TextField
           fullWidth
-          label="Enter Author"
+          label="Author"
           variant="outlined"
           margin="normal"
-          onChange={(e) => setAuthor(e.target.value)}
-          error={!!errors.author}
+          value={author}
+          disabled
           helperText={errors.author}
         />
         <TextField

@@ -50,13 +50,22 @@ function Login() {
     try {
       await axios
         .post("http://localhost:8000/login", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           email,
           password,
         })
-        .then((result) => {
-          console.log(result);
+        .then((response) => {
+          console.log(response);
           navigate("/home");
-          return result;
+          return response;
+        })
+        .then((result) => {
+          localStorage.setItem("token", result.data.token);
+          localStorage.setItem("firstname", result.data.user.firstname);
+          console.log(localStorage);
         });
     } catch (err) {
       console.error("Error during login:", err);

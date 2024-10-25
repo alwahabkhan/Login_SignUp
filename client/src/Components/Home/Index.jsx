@@ -13,6 +13,7 @@ import axios from "axios";
 
 function Home() {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -20,8 +21,6 @@ function Home() {
       .then((res) => setData(res.data))
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
-
-  const navigate = useNavigate();
 
   return (
     <TableContainer
@@ -73,16 +72,15 @@ function Home() {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              //   key={row.id}
+              key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {/* <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell> */}
               <TableCell align="center">{row.title}</TableCell>
               <TableCell align="center">{row.description}</TableCell>
               <TableCell align="center">{row.author}</TableCell>
-              <TableCell align="center">{row.date}</TableCell>
+              <TableCell align="center">
+                {new Date(row.date).toLocaleDateString()}
+              </TableCell>
               <TableCell align="center">{row.file}</TableCell>
             </TableRow>
           ))}
