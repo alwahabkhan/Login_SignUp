@@ -4,41 +4,45 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = "NOTESAPI";
 const nodemailer = require("nodemailer");
 
+const generateToken = (user) => {
+  return jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "7d" });
+};
+
 const handleRegisterUser = async (req, res) => {
   const { firstname, lastname, email, password, gender, dateofbirth } =
     req.body;
   try {
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(400).json({ message: "User already exist" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await User.create({
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
+      firstname,
+      lastname,
+      email,
       password: hashedPassword,
-      gender: gender,
-      dateofbirth: dateofbirth,
+      gender,
+      dateofbirth,
     });
 
     const userWithoutPassword = result.toObject();
     delete userWithoutPassword.password;
 
-    const token = jwt.sign({ email: result.email, id: result._id }, SECRET_KEY);
+    const token = generateToken(result);
 
-    res.status(200).json({ user: userWithoutPassword, token: token });
+    res.status(200).json({ user: userWithoutPassword, token });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const handleLoginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const userExist = await User.findOne({ email: email });
+    const userExist = await User.findOne({ email });
     if (!userExist) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -46,28 +50,24 @@ const handleLoginUser = async (req, res) => {
     const matchPassword = await bcrypt.compare(password, userExist.password);
 
     if (!matchPassword) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const userWithoutPassword = userExist.toObject();
     delete userWithoutPassword.password;
 
-    const token = jwt.sign(
-      { email: userExist.email, id: userExist._id },
-      SECRET_KEY
-    );
+    const token = generateToken(userExist);
 
-    res.status(200).json({ user: userWithoutPassword, token: token });
+    res.status(200).json({ user: userWithoutPassword, token });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const handleForgetPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    const userExist = await User.findOne({ email: email });
-
+    const userExist = await User.findOne({ email });
     if (!userExist) {
       return res.send({ Status: "User not found" });
     }
@@ -97,7 +97,7 @@ const handleForgetPassword = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -113,7 +113,7 @@ const handleResetPassword = async (req, res) => {
         .hash(password, 10)
         .then((hash) => {
           User.findByIdAndUpdate({ _id: id }, { password: hash })
-            .then((u) => res.send({ Status: "Success" }))
+            .then(() => res.send({ Status: "Success" }))
             .catch((err) => res.send({ Status: err }));
         })
         .catch((err) => res.send({ Status: err }));

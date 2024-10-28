@@ -5,7 +5,7 @@ import Home from "../src/Components/Home/Index.jsx";
 import CreatePost from "../src/Components/CreatePost/Index.jsx";
 import ForgetPassword from "./Components/ForgetPassword/ForgetPassword.jsx";
 import ResetPassword from "../src/Components/ResetPassword/Index.jsx";
-// import PostTable from "../src/Components/PostTable/Index.jsx";
+import ViewPost from "./ShowPost/Index.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           element={<ResetPassword />}
         ></Route>
         <Route path="/create-post" element={<CreatePost />}></Route>
-        {/* <Route path="/post-table" element={<PostTable />}></Route> */}
+        <Route path="/view-table" element={<ViewPost />}></Route>
       </Routes>
     </BrowserRouter>
   );

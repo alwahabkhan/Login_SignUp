@@ -8,6 +8,7 @@ const authenticateToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     req.user = decoded;
+    // req.user = user;
     next();
   } catch (error) {
     res.status(403).json({ error: "Forbidden" });

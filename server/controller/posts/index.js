@@ -1,5 +1,4 @@
 const Post = require("../../model/posts/index.js");
-const User = require("../../model/users/index.js");
 const multer = require("multer");
 const path = require("path");
 
@@ -17,38 +16,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const handlePost = async (req, res) => {
-  const { title, description, author, date } = req.body;
-
+const handleCreatePost = async (req, res) => {
   try {
-    const result = await Post.create({
-      title: title,
-      description: description,
-      author: author,
-      date: date,
-      file: req.file.filename,
+    const authorId = req.body.author;
+    const newPost = new Post({
+      title: req.body.title,
+      description: req.body.description,
+      date: new Date(),
+      file: req.file ? req.file.filename : null,
+      author: authorId,
     });
 
-    console.log(result);
-    res.status(201).json(result);
+    await newPost.save();
+    res.status(201).json(newPost);
   } catch (error) {
     console.error("Error creating post:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const handleGetPost = async (req, res) => {
   try {
-    const posts = await Post.find();
+    // const { author } = req.params;
+    // const posts = await Post.findById(author);
+    // const authorId = req.body.author;
+    const authorId = req.params.author;
+    const posts = await Post.find({ author: authorId });
+    // const posts = await Post.find();
     res.json(posts);
   } catch (err) {
-    console.error("Error fetching posts:", err);
+    console.error("Error fetching user posts:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 module.exports = {
-  handlePost,
+  handleCreatePost,
   upload,
   handleGetPost,
 };

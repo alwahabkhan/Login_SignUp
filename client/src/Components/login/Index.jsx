@@ -65,6 +65,7 @@ function Login() {
         .then((result) => {
           localStorage.setItem("token", result.data.token);
           localStorage.setItem("firstname", result.data.user.firstname);
+          localStorage.setItem("_id", result.data.user._id);
           console.log(localStorage);
         });
     } catch (err) {

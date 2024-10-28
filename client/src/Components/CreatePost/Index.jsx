@@ -10,13 +10,13 @@ function CreatePost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
-  const [date, setDate] = useState("");
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAuthor(localStorage.getItem("firstname"));
+    const userId = localStorage.getItem("_id");
+    setAuthor(userId);
   }, []);
 
   const validate = () => {
@@ -33,13 +33,8 @@ function CreatePost() {
       isValid = false;
     }
 
-    if (!date) {
-      tempErrors["date"] = "Date is required";
-      isValid = false;
-    }
-
     if (!file) {
-      tempErrors["image"] = "Image URL is required";
+      tempErrors["image"] = "Image is required";
       isValid = false;
     }
 
@@ -54,33 +49,22 @@ function CreatePost() {
       return;
     }
 
-    const formattedDate = new Date(date).toISOString();
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("author", author);
-    formData.append("date", formattedDate);
     formData.append("file", file);
 
-    console.log("FormData entries:");
-    formData.forEach((value, key) => console.log(key, value));
-
-    // console.log(file);
     try {
-      await axios
-        .post("http://localhost:8000/posts", formData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          navigate("/home");
-        });
+      await axios.post("http://localhost:8000/createposts", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      navigate("/home");
     } catch (err) {
-      console.error("Error during registration:", err);
+      console.error("Error during post creation:", err);
     }
   };
 
@@ -99,12 +83,8 @@ function CreatePost() {
       <Typography variant="h4" align="center" gutterBottom>
         Create New Entry
       </Typography>
-      <form
-        onSubmit={handleSubmit}
-        method="POST"
-        action="/post"
-        enctype="multipart/form-data"
-      >
+
+      <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
         <TextField
           fullWidth
           label="Enter Title"
@@ -122,24 +102,6 @@ function CreatePost() {
           onChange={(e) => setDescription(e.target.value)}
           error={!!errors.description}
           helperText={errors.description}
-        />
-        <TextField
-          fullWidth
-          label="Author"
-          variant="outlined"
-          margin="normal"
-          value={author}
-          disabled
-          helperText={errors.author}
-        />
-        <TextField
-          fullWidth
-          type="date"
-          variant="outlined"
-          margin="normal"
-          onChange={(e) => setDate(e.target.value)}
-          error={!!errors.date}
-          helperText={errors.date}
         />
         <Input
           fullWidth
