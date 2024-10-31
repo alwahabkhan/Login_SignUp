@@ -37,12 +37,8 @@ const handleCreatePost = async (req, res) => {
 
 const handleGetPost = async (req, res) => {
   try {
-    // const { author } = req.params;
-    // const posts = await Post.findById(author);
-    // const authorId = req.body.author;
     const authorId = req.params.author;
     const posts = await Post.find({ author: authorId });
-    // const posts = await Post.find();
     res.json(posts);
   } catch (err) {
     console.error("Error fetching user posts:", err);
@@ -50,8 +46,19 @@ const handleGetPost = async (req, res) => {
   }
 };
 
+const handleViewPost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const viewposts = await Post.findById(postId);
+    res.json(viewposts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   handleCreatePost,
   upload,
   handleGetPost,
+  handleViewPost,
 };

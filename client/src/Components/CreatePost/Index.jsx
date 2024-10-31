@@ -62,7 +62,7 @@ function CreatePost() {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/home");
+      navigate("/user-dashboard");
     } catch (err) {
       console.error("Error during post creation:", err);
     }
@@ -120,7 +120,10 @@ function CreatePost() {
         </Button>
       </form>
       <Box mt={2} textAlign="center">
-        <Link to="/home" style={{ textDecoration: "none", color: "#007BFF" }}>
+        <Link
+          to="/user-dashboard"
+          style={{ textDecoration: "none", color: "#007BFF" }}
+        >
           Go to Home Page
         </Link>
       </Box>

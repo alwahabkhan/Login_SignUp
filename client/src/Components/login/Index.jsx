@@ -48,26 +48,31 @@ function Login() {
     }
 
     try {
-      await axios
-        .post("http://localhost:8000/login", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          email,
-          password,
-        })
-        .then((response) => {
-          console.log(response);
-          navigate("/home");
-          return response;
-        })
-        .then((result) => {
-          localStorage.setItem("token", result.data.token);
-          localStorage.setItem("firstname", result.data.user.firstname);
-          localStorage.setItem("_id", result.data.user._id);
-          console.log(localStorage);
-        });
+      const response = await axios.post("http://localhost:8000/login", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        email,
+        password,
+      });
+
+      console.log(response);
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("firstname", response.data.user.firstname);
+      localStorage.setItem("_id", response.data.user._id);
+      localStorage.setItem("role", response.data.user.role);
+
+      console.log(localStorage);
+
+      if (response.data.user.role === "Admin") {
+        navigate("/admin-dashboard");
+      } else if (response.data.user.role === "User") {
+        navigate("/user-dashboard");
+      } else {
+        console.error("Unknown user role:", response.data.user.role);
+      }
     } catch (err) {
       console.error("Error during login:", err);
     }
@@ -139,7 +144,6 @@ function Login() {
             </Form.Control.Feedback>
           </Form.Group>
           <Button
-            // onClick={() => navigate("/home")}
             variant="primary"
             type="submit"
             style={{

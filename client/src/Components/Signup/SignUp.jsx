@@ -4,6 +4,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Typography } from "@mui/material";
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 
 function SignUp() {
   const [firstname, setFirstName] = useState("");
@@ -14,6 +22,8 @@ function SignUp() {
   const [gender, setGender] = useState("");
   const [dateofbirth, setDateOfBirth] = useState("");
   const [error, setError] = useState("");
+  const [role, setRole] = useState("");
+  const [secretkey, setSecretKey] = useState("");
 
   let navigate = useNavigate();
 
@@ -46,26 +56,32 @@ function SignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    if (role === "Admin" && secretkey !== "Alwahabkhan") {
+      alert("Invalid Admin");
+      e.preventDefault();
+    } else {
+      e.preventDefault();
+      setError("");
 
-    if (validateForm()) {
-      try {
-        await axios
-          .post("http://localhost:8000/register", {
-            firstname,
-            lastname,
-            email,
-            password,
-            gender,
-            dateofbirth,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate("/login");
-          });
-      } catch (err) {
-        console.error("Error during registration:", err);
+      if (validateForm()) {
+        try {
+          await axios
+            .post("http://localhost:8000/register", {
+              firstname,
+              lastname,
+              email,
+              password,
+              gender,
+              dateofbirth,
+              role,
+            })
+            .then((res) => {
+              console.log(res);
+              navigate("/login");
+            });
+        } catch (err) {
+          console.error("Error during registration:", err);
+        }
       }
     }
   };
@@ -102,6 +118,48 @@ function SignUp() {
           )}
 
           <Form.Group className="mb-4">
+            <FormControl component="fieldset" sx={{ maxWidth: "50%" }}>
+              <FormLabel component="legend">Register As:</FormLabel>
+              <RadioGroup
+                row
+                name="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <FormControlLabel
+                  value="User"
+                  control={<Radio />}
+                  label="User"
+                />
+                <FormControlLabel
+                  value="Admin"
+                  control={<Radio />}
+                  label="Admin"
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <br />
+            {role === "Admin" && (
+              <>
+                <Typography style={{ fontSize: "14px", color: "#555" }}>
+                  Secret Key
+                </Typography>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Secret Key"
+                  onChange={(e) => setSecretKey(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  style={{
+                    borderRadius: "8px",
+                    borderColor: "#ccc",
+                    boxShadow: "none",
+                  }}
+                />
+              </>
+            )}
+            <br />
             <Form.Label style={{ fontSize: "14px", color: "#555" }}>
               First Name
             </Form.Label>

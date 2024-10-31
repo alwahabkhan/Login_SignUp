@@ -9,7 +9,7 @@ const generateToken = (user) => {
 };
 
 const handleRegisterUser = async (req, res) => {
-  const { firstname, lastname, email, password, gender, dateofbirth } =
+  const { firstname, lastname, email, password, gender, dateofbirth, role } =
     req.body;
   try {
     const userExist = await User.findOne({ email });
@@ -26,6 +26,7 @@ const handleRegisterUser = async (req, res) => {
       password: hashedPassword,
       gender,
       dateofbirth,
+      role,
     });
 
     const userWithoutPassword = result.toObject();
