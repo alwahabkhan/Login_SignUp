@@ -69,65 +69,79 @@ function CreatePost() {
   };
 
   return (
-    <Container
+    <Box
+      component="main"
       sx={{
-        maxWidth: "500px",
-        width: "30%",
-        marginTop: "50px",
-        padding: "40px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        borderRadius: "12px",
-        backgroundColor: "#fff",
+        flexGrow: 1,
+        p: 3,
+        background: "linear-gradient(to right,  #4682B4, #40E0D0)",
+        minHeight: "100vh",
       }}
     >
-      <Typography variant="h4" align="center" gutterBottom>
-        Create New Entry
-      </Typography>
+      <Container
+        sx={{
+          maxWidth: "500px",
+          width: "30%",
+          marginTop: "100px",
+          padding: "40px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          borderRadius: "12px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Typography variant="h4" align="center" gutterBottom>
+          Create New Entry
+        </Typography>
 
-      <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
-        <TextField
-          fullWidth
-          label="Enter Title"
-          variant="outlined"
-          margin="normal"
-          onChange={(e) => setTitle(e.target.value)}
-          error={!!errors.title}
-          helperText={errors.title}
-        />
-        <TextField
-          fullWidth
-          label="Enter Description"
-          variant="outlined"
-          margin="normal"
-          onChange={(e) => setDescription(e.target.value)}
-          error={!!errors.description}
-          helperText={errors.description}
-        />
-        <Input
-          fullWidth
-          accept="image/*"
-          type="file"
-          name="file"
-          variant="outlined"
-          margin="normal"
-          onChange={(e) => setFile(e.target.files[0])}
-          error={!!errors.image}
-          helperText={errors.image}
-        />
-        <br /> <br />
-        <Button variant="contained" type="submit" fullWidth>
-          Submit
-        </Button>
-      </form>
-      <Box mt={2} textAlign="center">
-        <Link
-          to="/user-dashboard"
-          style={{ textDecoration: "none", color: "#007BFF" }}
+        <form
+          onSubmit={handleSubmit}
+          method="POST"
+          encType="multipart/form-data"
         >
-          Go to Home Page
-        </Link>
-      </Box>
-    </Container>
+          <TextField
+            fullWidth
+            label="Enter Title"
+            variant="outlined"
+            margin="normal"
+            onChange={(e) => setTitle(e.target.value)}
+            error={!!errors.title}
+            helperText={errors.title}
+          />
+          <TextField
+            fullWidth
+            label="Enter Description"
+            variant="outlined"
+            margin="normal"
+            onChange={(e) => setDescription(e.target.value)}
+            error={!!errors.description}
+            helperText={errors.description}
+          />
+          <Input
+            fullWidth
+            accept="image/*"
+            type="file"
+            name="file"
+            variant="outlined"
+            margin="normal"
+            onChange={(e) => setFile(e.target.files[0])}
+            error={!!errors.image}
+            helperText={errors.image}
+          />
+          <br /> <br />
+          <Button variant="contained" type="submit" fullWidth>
+            Submit
+          </Button>
+        </form>
+        <Box mt={2} textAlign="center">
+          <Link
+            to="/user-dashboard"
+            style={{ textDecoration: "none", color: "#007BFF" }}
+          >
+            Go to Home Page
+          </Link>
+        </Box>
+      </Container>
+    </Box>
   );
 }
 

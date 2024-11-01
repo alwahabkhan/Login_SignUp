@@ -1,33 +1,30 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Box from "@mui/material/Box";
-
-function ResetPassword() {
-  const [password, setPassword] = useState("");
+function ForgetPassword() {
+  const [email, setEmail] = useState();
   const navigate = useNavigate();
-  const { id, token } = useParams();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `http://localhost:8000/reset-password/${id}/${token}`,
-        {
-          password,
-        }
-      );
-      navigate("/login");
-      console.log(response);
+      await axios
+        .post("http://localhost:8000/forget-password", {
+          email,
+        })
+        .then((result) => {
+          navigate("/login");
+          console.log(result);
+          return result;
+        });
     } catch (err) {
-      console.error("Error during reset password:", err);
+      console.error("Error during registration:", err);
     }
   };
-
   return (
     <Box
       component="main"
@@ -60,16 +57,16 @@ function ResetPassword() {
                 marginBottom: "20px",
               }}
             >
-              Reset Password
+              Forgot Password{" "}
             </h3>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-4">
               <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-                New Password
+                Email address
               </Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Enter password"
-                onChange={(e) => setPassword(e.target.value)}
+                type="email"
+                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
                 style={{
                   padding: "10px",
                   borderRadius: "8px",
@@ -97,7 +94,31 @@ function ResetPassword() {
                 (e.currentTarget.style.backgroundColor = "#007BFF")
               }
             >
-              Update Password
+              Send Email
+            </Button>
+            <br />
+            <br />
+            <Button
+              onClick={() => navigate("/login")}
+              variant="primary"
+              type="button"
+              style={{
+                width: "100%",
+                padding: "12px",
+                fontSize: "16px",
+                backgroundColor: "#007BFF",
+                border: "none",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#0056b3")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#007BFF")
+              }
+            >
+              Go Back
             </Button>
           </Form>
         </div>
@@ -106,4 +127,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ForgetPassword;

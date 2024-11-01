@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import axios from "axios";
 import SideBar from "../SideBar/Index";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 function AdminDetails() {
   const [data, setData] = useState(null);
@@ -17,10 +25,33 @@ function AdminDetails() {
       .catch((err) => console.error("Error fetching admin data:", err));
   }, [id]);
 
-  if (!data) return <Typography>Loading...</Typography>;
+  if (!data)
+    return (
+      <Stack
+        sx={{
+          marginTop: "250px",
+          marginLeft: "500px",
+        }}
+        spacing={2}
+      >
+        <Skeleton variant="rectangular" width={610} height={60} />
+        <Skeleton variant="rounded" width={610} height={60} />
+        <Skeleton variant="rectangular" width={610} height={60} />
+        <Skeleton variant="rounded" width={610} height={60} />
+      </Stack>
+    );
 
   return (
-    <Box sx={{ display: "flex", bgcolor: "#f4f6f8", minHeight: "100vh" }}>
+    <Box
+      component="main"
+      sx={{
+        display: "flex",
+        flexGrow: 1,
+        p: 3,
+        background: "linear-gradient(to right, #088F8F, #900C3F)",
+        minHeight: "100vh",
+      }}
+    >
       <SideBar />
       <Box
         component="main"
@@ -29,76 +60,62 @@ function AdminDetails() {
           p: 3,
           display: "flex",
           justifyContent: "center",
-          marginTop: "100px",
+          marginTop: "150px",
+          marginBottom: "270px",
+          marginLeft: "200px",
+          marginRight: "200px",
         }}
       >
-        <Card
-          sx={{
-            maxWidth: { xs: "90%", sm: "70%", md: "50%" },
-            maxHeight: "350px",
-            mt: 10,
-            p: 4,
-            boxShadow: "0 6px 20px rgba(0, 0, 0, 0.15)",
-            borderRadius: "15px",
-            background: "linear-gradient(135deg, #fff5e6, #ffd6e0)",
-            textAlign: "left",
-          }}
-        >
-          <CardContent>
-            <Typography
-              variant="h4"
-              gutterBottom
-              sx={{ fontWeight: "bold", color: "#4A4A8A" }}
-            >
-              Admin Details
-            </Typography>
-            <Typography variant="h6" sx={{ color: "#4A4A8A", mt: 2 }}>
-              <strong>Name:</strong>{" "}
-              <span style={{ fontWeight: "normal", color: "#000000" }}>
-                {data.firstname} {data.lastname}
-              </span>
-            </Typography>
-            <Typography variant="h6" sx={{ color: "#4A4A8A", mt: 1 }}>
-              <strong>Email:</strong>{" "}
-              <span style={{ fontWeight: "normal", color: "#000000" }}>
-                {data.email}
-              </span>
-            </Typography>
-            <Typography variant="h6" sx={{ color: "#4A4A8A", mt: 1 }}>
-              <strong>Gender:</strong>{" "}
-              <span style={{ fontWeight: "normal", color: "#000000" }}>
-                {data.gender}
-              </span>
-            </Typography>
-            <Typography variant="h6" sx={{ color: "#4A4A8A", mt: 1 }}>
-              <strong>Date of Birth:</strong>{" "}
-              <span style={{ fontWeight: "normal", color: "#000000" }}>
-                {new Date(data.dateofbirth).toLocaleDateString()}
-              </span>
-            </Typography>
-            <Typography variant="h6" sx={{ color: "#4A4A8A", mt: 1 }}>
-              <strong>Role:</strong>{" "}
-              <span style={{ fontWeight: "normal", color: "#000000" }}>
-                {data.role}
-              </span>
-            </Typography>
-            {data.file && (
-              <Box
-                component="img"
-                sx={{
-                  width: "60%",
-                  maxWidth: 300,
-                  mt: 3,
-                  borderRadius: "10px",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-                  border: "2px solid #FF5A5F",
-                }}
-                src={`http://localhost:8000/uploads/images/${data.file}`}
-                alt="Admin profile"
-              />
-            )}
-          </CardContent>
-        </Card>
+        <TableContainer component={Paper}>
+          <Typography
+            variant="h4"
+            sx={{ marginLeft: "20px", marginTop: "16px" }}
+          >
+            <strong> Details of Admin: </strong>
+          </Typography>
+          <Table sx={{ minWidth: 350 }} aria-label="admin details table">
+            <TableBody>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>First Name</strong>
+                </TableCell>
+                <TableCell align="left">{data.firstname}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>Last Name</strong>
+                </TableCell>
+                <TableCell align="left">{data.lastname}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>Email</strong>
+                </TableCell>
+                <TableCell align="left">{data.email}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>Gender</strong>
+                </TableCell>
+                <TableCell align="left">{data.gender}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>Date of Birth</strong>
+                </TableCell>
+                <TableCell align="left">
+                  {new Date(data.dateofbirth).toLocaleDateString()}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">
+                  <strong>Role</strong>
+                </TableCell>
+                <TableCell align="left">{data.role}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );

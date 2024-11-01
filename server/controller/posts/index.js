@@ -56,9 +56,19 @@ const handleViewPost = async (req, res) => {
   }
 };
 
+const handleDeletePost = async (req, res) => {
+  try {
+    const deletepost = await Post.findByIdAndDelete(req.params.id);
+    res.json(deletepost);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   handleCreatePost,
   upload,
   handleGetPost,
   handleViewPost,
+  handleDeletePost,
 };

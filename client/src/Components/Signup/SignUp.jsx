@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 import {
   FormControl,
   FormLabel,
@@ -24,6 +25,7 @@ function SignUp() {
   const [error, setError] = useState("");
   const [role, setRole] = useState("");
   const [secretkey, setSecretKey] = useState("");
+  const [serverError, setServerError] = useState("");
 
   let navigate = useNavigate();
 
@@ -80,245 +82,227 @@ function SignUp() {
               navigate("/login");
             });
         } catch (err) {
-          console.error("Error during registration:", err);
+          if (err.response && err.response.data && err.response.data.message) {
+            setServerError(err.response.data.message);
+          } else {
+            setServerError("An unexpected error occurred. Please try again.");
+          }
         }
       }
     }
   };
 
   return (
-    <div
-      className="container"
-      style={{
-        maxWidth: "500px",
-        marginTop: "50px",
-        marginBottom: "50px",
-        padding: "30px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        borderRadius: "12px",
-        backgroundColor: "#fff",
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        p: 3,
+        background: "linear-gradient(to right, #add8e6, #4682B4)",
+        minHeight: "100vh",
       }}
     >
-      <div>
-        <Form onSubmit={handleSubmit} style={{ padding: "20px" }}>
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: "bold",
-              color: "#333",
-              textAlign: "center",
-              marginBottom: "20px",
-            }}
-          >
-            Create Your Account
-          </h1>
-
-          {error && (
-            <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-          )}
-
-          <Form.Group className="mb-4">
-            <FormControl component="fieldset" sx={{ maxWidth: "50%" }}>
-              <FormLabel component="legend">Register As:</FormLabel>
-              <RadioGroup
-                row
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <FormControlLabel
-                  value="User"
-                  control={<Radio />}
-                  label="User"
-                />
-                <FormControlLabel
-                  value="Admin"
-                  control={<Radio />}
-                  label="Admin"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <br />
-            {role === "Admin" && (
-              <>
-                <Typography style={{ fontSize: "14px", color: "#555" }}>
-                  Secret Key
-                </Typography>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Secret Key"
-                  onChange={(e) => setSecretKey(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                  style={{
-                    borderRadius: "8px",
-                    borderColor: "#ccc",
-                    boxShadow: "none",
-                  }}
-                />
-              </>
-            )}
-            <br />
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              First Name
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter First Name"
-              onChange={(e) => setFirstName(e.target.value)}
+      <div
+        className="container"
+        style={{
+          maxWidth: "500px",
+          marginTop: "50px",
+          marginBottom: "50px",
+          padding: "30px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          borderRadius: "12px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <div>
+          <Form onSubmit={handleSubmit} style={{ padding: "20px" }}>
+            <h1
               style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Last Name
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Last Name"
-              onChange={(e) => setLastName(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Email address
-            </Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Password
-            </Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter Password"
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Confirm Password
-            </Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Gender
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Gender"
-              onChange={(e) => setGender(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label style={{ fontSize: "14px", color: "#555" }}>
-              Date of Birth
-            </Form.Label>
-            <Form.Control
-              type="date"
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              style={{
-                padding: "10px",
-                borderRadius: "8px",
-                borderColor: "#ccc",
-                boxShadow: "none",
-              }}
-            />
-          </Form.Group>
-
-          <Button
-            type="submit"
-            variant="primary"
-            style={{
-              width: "100%",
-              padding: "12px",
-              fontSize: "16px",
-              backgroundColor: "#007BFF",
-              border: "none",
-              borderRadius: "8px",
-              transition: "background-color 0.3s ease",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#0056b3")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#007BFF")
-            }
-          >
-            Sign Up
-          </Button>
-
-          <div className="text-center mt-4">
-            <p
-              style={{
-                display: "inline-block",
-                marginRight: "10px",
-                color: "#666",
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "#333",
+                textAlign: "center",
+                marginBottom: "20px",
               }}
             >
-              Already have an account?
-            </p>
-            <button
-              onClick={() => navigate("/login")}
-              type="button"
-              className="btn btn-outline-primary"
+              Create Your Account
+            </h1>
+
+            {serverError && (
+              <p style={{ color: "red", textAlign: "center" }}>{serverError}</p>
+            )}
+
+            <Form.Group className="mb-4">
+              <FormControl component="fieldset" sx={{ maxWidth: "50%" }}>
+                <FormLabel component="legend">Register As:</FormLabel>
+                <RadioGroup
+                  row
+                  name="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <FormControlLabel
+                    value="User"
+                    control={<Radio />}
+                    label="User"
+                  />
+                  <FormControlLabel
+                    value="Admin"
+                    control={<Radio />}
+                    label="Admin"
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              <br />
+              {role === "Admin" && (
+                <>
+                  <Typography style={{ fontSize: "14px", color: "#555" }}>
+                    Secret Key
+                  </Typography>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Secret Key"
+                    onChange={(e) => setSecretKey(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                    style={{
+                      borderRadius: "8px",
+                      borderColor: "#ccc",
+                      boxShadow: "none",
+                    }}
+                  />
+                </>
+              )}
+              <br />
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                First Name
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter First Name"
+                onChange={(e) => setFirstName(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Last Name
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Last Name"
+                onChange={(e) => setLastName(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Email address
+              </Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Password
+              </Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter Password"
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Confirm Password
+              </Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm Password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Gender
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Gender"
+                onChange={(e) => setGender(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ fontSize: "14px", color: "#555" }}>
+                Date of Birth
+              </Form.Label>
+              <Form.Control
+                type="date"
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                style={{
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderColor: "#ccc",
+                  boxShadow: "none",
+                }}
+              />
+            </Form.Group>
+
+            <Button
+              type="submit"
+              variant="primary"
               style={{
-                color: "white",
+                width: "100%",
+                padding: "12px",
+                fontSize: "16px",
                 backgroundColor: "#007BFF",
+                border: "none",
                 borderRadius: "8px",
-                padding: "10px 20px",
-                transition: "all 0.3s ease",
+                transition: "background-color 0.3s ease",
               }}
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#0056b3")
@@ -327,12 +311,44 @@ function SignUp() {
                 (e.currentTarget.style.backgroundColor = "#007BFF")
               }
             >
-              Login
-            </button>
-          </div>
-        </Form>
+              Sign Up
+            </Button>
+
+            <div className="text-center mt-4">
+              <p
+                style={{
+                  display: "inline-block",
+                  marginRight: "10px",
+                  color: "#666",
+                }}
+              >
+                Already have an account?
+              </p>
+              <button
+                onClick={() => navigate("/login")}
+                type="button"
+                className="btn btn-outline-primary"
+                style={{
+                  color: "white",
+                  backgroundColor: "#007BFF",
+                  borderRadius: "8px",
+                  padding: "10px 20px",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#0056b3")
+                }
+                onMouseOut={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#007BFF")
+                }
+              >
+                Login
+              </button>
+            </div>
+          </Form>
+        </div>
       </div>
-    </div>
+    </Box>
   );
 }
 

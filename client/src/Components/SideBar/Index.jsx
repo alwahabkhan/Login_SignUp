@@ -15,351 +15,105 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useNavigate } from "react-router-dom";
+import Drawer from "@mui/material/Drawer";
 
 const drawerWidth = 240;
 
-const openedMixin = (theme) => ({
+const StyledDrawer = styled(Drawer)(({ theme }) => ({
   width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+  "& .MuiDrawer-paper": {
+    width: drawerWidth,
+    backgroundColor: "#1a1a2e",
+    borderRight: "none",
   },
-});
+}));
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        ...openedMixin(theme),
-        "& .MuiDrawer-paper": openedMixin(theme),
-      },
-    },
-    {
-      props: ({ open }) => !open,
-      style: {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
-      },
-    },
-  ],
+const StyledListItemButton = styled(ListItemButton)(({ selected }) => ({
+  "&:hover": {
+    backgroundColor: "#3a3a5e",
+    color: "#ffffff",
+  },
+  backgroundColor: selected ? "#800000" : "transparent",
+  color: selected ? "#ffffff" : "#b0b0b0",
 }));
 
 export default function SideBar() {
   const [open, setOpen] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const navigate = useNavigate();
+
+  const handleNavigation = (index, path) => {
+    setSelectedIndex(index);
+    navigate(path);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-
-      <Drawer variant="permanent" open={open}>
-        <br />
-        <br />
-        <br />
+      <StyledDrawer variant="permanent" open={open}>
         <Divider />
         <List>
+          {[
+            {
+              text: "Dashboard",
+              icon: <DashboardIcon sx={{ color: "white" }} />,
+              path: "/admin-dashboard",
+            },
+            {
+              text: "Admin",
+              icon: <PersonIcon sx={{ color: "white" }} />,
+              path: "/admin-details",
+            },
+            {
+              text: "Users",
+              icon: <PeopleIcon sx={{ color: "white" }} />,
+              path: "/users-details",
+            },
+            {
+              text: "Posts",
+              icon: <PostAddIcon sx={{ color: "white" }} />,
+              path: "/posts-details",
+            },
+          ].map((item, index) => (
+            <ListItem
+              key={item.text}
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => handleNavigation(index, item.path)}
+            >
+              <StyledListItemButton selected={selectedIndex === index}>
+                <ListItemIcon sx={{ minWidth: 0, justifyContent: "center" }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} sx={{ marginLeft: "10px" }} />
+              </StyledListItemButton>
+            </ListItem>
+          ))}
+          <Divider sx={{ my: 2 }} />
           <ListItem
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/admin-dashboard");
-            }}
+            onClick={() => handleNavigation(4, "/login")}
           >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
+            <StyledListItemButton
+              selected={selectedIndex === 4}
+              sx={{
+                marginTop: "450px",
+              }}
             >
               <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Dashboard"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/admin-details");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Admin"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/users-details");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Users"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => {
-              navigate("/posts-details");
-            }}
-          >
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <PostAddIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Posts"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
-          </ListItem>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={[
-                {
-                  minHeight: 48,
-                  px: 2.5,
-                },
-                open
-                  ? {
-                      justifyContent: "initial",
-                    }
-                  : {
-                      justifyContent: "center",
-                    },
-              ]}
-            >
-              <ListItemIcon
-                sx={[
-                  {
-                    minWidth: 0,
-                    justifyContent: "center",
-                  },
-                  open
-                    ? {
-                        mr: 3,
-                      }
-                    : {
-                        mr: "auto",
-                      },
-                ]}
-              >
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText
-                onClick={() => {
-                  navigate("/login");
+                sx={{
+                  minWidth: 0,
+                  justifyContent: "center",
                 }}
-                primary="Logout"
-                sx={[
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
-                ]}
-              />
-            </ListItemButton>
+              >
+                <LogoutIcon sx={{ color: "white" }} />
+              </ListItemIcon>
+              <ListItemText primary="Logout" sx={{ marginLeft: "10px" }} />
+            </StyledListItemButton>
           </ListItem>
         </List>
-        <Divider />
-      </Drawer>
+      </StyledDrawer>
     </Box>
   );
 }
